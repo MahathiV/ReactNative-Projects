@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Vibration} from 'react-native';
+//import {vibration} from './utils';
+
 
 
 export default class App extends React.Component {
@@ -7,7 +9,8 @@ export default class App extends React.Component {
   state = {
     count: 0,
     timer:null,
-    timerRunning: null
+    timerRunning: null,
+    phase: "Work Phase"
   }
 
   start_timer = () => {
@@ -18,7 +21,26 @@ export default class App extends React.Component {
   increaseCount = () => {
     let {count} = this.state;
     count+=1;
+
+    if (count === 25*60)
+    {
+      this.setState({phase: "Rest Phase"})
+      count = 0
+      Vibration.vibrate()
+    }
+
+    if ((count === 5*60) && (this.state.phase === "Rest Phase"))
+    {
+      this.setState({phase: "Work Phase"})
+      count = 0
+      Vibration.vibrate()
+    }
+
+
+
     this.setState ({count})
+
+
   }
 
   stop_timer = () => {
@@ -52,22 +74,43 @@ export default class App extends React.Component {
 
   display_minutes = () =>
   {
-    if(this.state.count === 0)
+    if (this.state.phase === "Work Phase") 
     {
-      return '25'
-      
+      if(this.state.count === 0)
+      {
+        return '25'
+        
+      }
+  
+      else
+      {
+        return `${24 - Math.floor(this.state.count/60)}`
+      }
+
     }
 
     else
     {
-      return `${24 - Math.floor(this.state.count/60)}`
+      if(this.state.count === 0)
+      {
+        return '5'
+        
+      }
+      else
+      {
+        return `${4 - Math.floor(this.state.count/60)}`
+      }
     }
+
     
   }
 
   display_timer = () => {
     return `${this.display_minutes()} : ${this.display_seconds()}`
-   
+  }
+
+  phase = () => {
+    return `${this.state.phase}`
   }
 
   render() {
@@ -76,8 +119,12 @@ export default class App extends React.Component {
         <Button title="Start" onPress = {this.start_timer}/>
         <Button title="Stop" onPress = {this.stop_timer}/>
         <Button title="Reset" onPress={this.restart_timer}/>
-    
-    <Text>{this.display_timer()}</Text>
+
+        <Text>{this.phase()}</Text>
+        <Text>{this.display_timer()}</Text>
+
+        
+
       </View>
     );
     }
