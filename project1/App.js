@@ -113,15 +113,15 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button title="Start" onPress = {this.start_timer}/>
+        <View style={styles.buttonWrapper}>
+          <Button title="Start" onPress = {this.start_timer}/>
+        </View>
         <Button title="Stop" onPress = {this.stop_timer}/>
         <Button title="Reset" onPress={this.restart_timer}/>
-
-        <Text>{this.phase()}</Text>
+        <View style={styles.phaseTextWrapper}>
+          <Text style={styles.phaseText}>{this.phase()}</Text>
+        </View>
         <Text>{this.display_timer()}</Text>
-
-        
-
       </View>
     );
     }
@@ -133,5 +133,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonWrapper: {
+    padding: 10,
+  },
+  phaseTextWrapper: {
+    height: 150,
+    width: 150,
+    borderRadius: 75,
+    margin: 10,
+    backgroundColor: "#ae77e7",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  phaseText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    // color: '#800020',
+    textTransform: "uppercase",
   },
 });
