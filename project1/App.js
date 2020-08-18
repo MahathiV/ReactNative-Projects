@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Vibration} from 'react-native';
-//import {vibration} from './utils';
+import {vibrate} from './utils'
 
 
 
@@ -26,14 +26,14 @@ export default class App extends React.Component {
     {
       this.setState({phase: "Rest Phase"})
       count = 0
-      Vibration.vibrate()
+      vibrate();
     }
 
     if ((count === 5*60) && (this.state.phase === "Rest Phase"))
     {
       this.setState({phase: "Work Phase"})
       count = 0
-      Vibration.vibrate()
+      vibrate();
     }
 
 
