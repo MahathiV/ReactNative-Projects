@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Vibration} from 'react-native';
+import { StyleSheet, Text, View, Button} from 'react-native';
 import {vibrate} from './utils'
 
 
@@ -14,9 +14,13 @@ export default class App extends React.Component {
   }
 
   start_timer = () => {
-    this.setState({timerRunning:true})
-    this.setState({timer: setInterval(this.increaseCount,1000)})
-  }
+    if (!this.state.timerRunning) {
+      this.setState({ timerRunning: true });
+      this.setState({
+        timer: setInterval(this.increaseCount, 1000),
+      });
+    }
+  };
   
   increaseCount = () => {
     let {count} = this.state;
@@ -51,13 +55,6 @@ export default class App extends React.Component {
 
   restart_timer = () => {
     this.setState({count:0});
-    
-    if(this.state.timerRunning)
-    {
-      this.stop_timer()
-      this.start_timer()
-    }
-
   }
 
   display_seconds = () =>
