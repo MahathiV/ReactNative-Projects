@@ -8,13 +8,14 @@ export default class App extends React.Component {
     timer: null,
     timerRunning: null,
     phase: "Work Phase",
+    phaseBackgroundColor: "#ae77e7",
   };
 
   startTimer = () => {
     if (!this.state.timerRunning) {
       this.setState({ timerRunning: true });
       this.setState({
-        timer: setInterval(this.increaseCount, 1000),
+        timer: setInterval(this.increaseCount, 10),
       });
     }
   };
@@ -25,14 +26,14 @@ export default class App extends React.Component {
 
     if (count === 25 * 60) {
       // To vibrate the phone after 25 minutes - Work Phase
-      this.setState({ phase: "Rest Phase" });
+      this.setState({ phase: "Rest Phase",phaseBackgroundColor: "#008800" });
       count = 0;
       vibrate();
     }
 
     if (count === 5 * 60 && this.state.phase === "Rest Phase") {
       // To vibrate the phone after 5 minutes - Rest Phase
-      this.setState({ phase: "Work Phase" });
+      this.setState({ phase: "Work Phase",phaseBackgroundColor: "#ae77e7"});
       count = 0;
       vibrate();
     }
@@ -85,7 +86,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.phaseTextWrapper}>
+        <View style={[styles.phaseTextWrapper,{backgroundColor: this.state.phaseBackgroundColor}]}>
           <Text style={styles.phaseText}>{this.phase()}</Text>
         </View>
         <View style={styles.timerTextWrapper}>
@@ -121,7 +122,6 @@ const styles = StyleSheet.create({
     width: 150,
     borderRadius: 75,
     margin: 10,
-    backgroundColor: "#ae77e7",
     alignItems: "center",
     justifyContent: "center",
   },
