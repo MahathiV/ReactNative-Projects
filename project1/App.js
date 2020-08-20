@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import { vibrate } from "./utils";
 
 export default class App extends React.Component {
@@ -9,6 +9,8 @@ export default class App extends React.Component {
     timerRunning: null,
     phase: "Work Phase",
     phaseBackgroundColor: "#ae77e7",
+    workPhaseTime: 25,
+    restPhaseTime:5
   };
 
   startTimer = () => {
@@ -24,16 +26,16 @@ export default class App extends React.Component {
     let { count } = this.state;
     count += 1;
 
-    if (count === 25 * 60) {
+    if (count === this.state.workPhaseTime * 60) {
       // To vibrate the phone after 25 minutes - Work Phase
-      this.setState({ phase: "Rest Phase",phaseBackgroundColor: "#008800" });
+      this.setState({ phase: "Rest Phase", phaseBackgroundColor: "#008800" });
       count = 0;
       vibrate();
     }
 
-    if (count === 5 * 60 && this.state.phase === "Rest Phase") {
+    if (count === this.state.restPhaseTime * 60 && this.state.phase === "Rest Phase") {
       // To vibrate the phone after 5 minutes - Rest Phase
-      this.setState({ phase: "Work Phase",phaseBackgroundColor: "#ae77e7"});
+      this.setState({ phase: "Work Phase", phaseBackgroundColor: "#ae77e7" });
       count = 0;
       vibrate();
     }
@@ -62,15 +64,15 @@ export default class App extends React.Component {
   displayMinutes = () => {
     if (this.state.phase === "Work Phase") {
       if (this.state.count === 0) {
-        return "25";
+        return `${this.state.workPhaseTime}`;
       } else {
-        return `${24 - Math.floor(this.state.count / 60)}`;
+        return `${(this.state.workPhaseTime - 1) - Math.floor(this.state.count / 60)}`;
       }
     } else {
       if (this.state.count === 0) {
-        return "5";
+        return `${this.state.restPhaseTime}`;
       } else {
-        return `${4 - Math.floor(this.state.count / 60)}`;
+        return `${(this.state.restPhaseTime - 1) - Math.floor(this.state.count / 60)}`;
       }
     }
   };
@@ -83,14 +85,53 @@ export default class App extends React.Component {
     return `${this.state.phase}`;
   };
 
+  updateWorkTimer = (text) => 
+  {
+    try{parseInt(text)}
+    catch 
+    {
+
+      return null;
+    }
+
+    this.setState({workPhaseTime : parseInt(text)})
+    
+  }
+
+  restWorkTimer = (text) =>
+  {
+    try{parseInt(text)}
+    catch
+    {
+      return null;
+    }
+
+    this.setState({restPhaseTime : parseInt(text)})
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={[styles.phaseTextWrapper,{backgroundColor: this.state.phaseBackgroundColor}]}>
+        <View
+          style={[
+            styles.phaseTextWrapper,
+            { backgroundColor: this.state.phaseBackgroundColor },
+          ]}
+        >
           <Text style={styles.phaseText}>{this.phase()}</Text>
+          <TextInput 
+           style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
+           placeholder = "WorkPhase Timer"
+           onChangeText = {(text) => this.updateWorkTimer(text)} />
+
+          <TextInput 
+           style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
+           placeholder = "RestPhase Timer"
+           onChangeText = {(text) => this.restWorkTimer(text)} />
+
         </View>
         <View style={styles.timerTextWrapper}>
-        <Text style={styles.timerText}>{this.displayTimer()}</Text>
+          <Text style={styles.timerText}>{this.displayTimer()}</Text>
         </View>
 
         <View style={styles.buttonWrapper}>
@@ -132,12 +173,11 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontWeight: "bold",
-    fontSize: 28
+    fontSize: 28,
   },
   timerTextWrapper: {
-    padding:15,
+    padding: 15,
     borderColor: "black",
-    borderWidth: 1
-
-  }
+    borderWidth: 1,
+  },
 });
