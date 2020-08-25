@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import { vibrate } from "./utils";
 
 export default class App extends React.Component {
@@ -91,7 +91,13 @@ export default class App extends React.Component {
     catch 
     {
 
-      return null;
+      //return null;
+
+      if (isNaN(parseInt(text)))
+      {
+        Alert.alert("Please Enter Number")
+      }
+      
     }
 
     this.setState({workPhaseTime : parseInt(text)})
@@ -119,17 +125,24 @@ export default class App extends React.Component {
           ]}
         >
           <Text style={styles.phaseText}>{this.phase()}</Text>
-          <TextInput 
+        </View>
+
+        <View style={styles.displayTimerWrapper}>
+        <TextInput 
+           keyboardType = "numeric"
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
            placeholder = "WorkPhase Timer"
            onChangeText = {(text) => this.updateWorkTimer(text)} />
+        </View>
 
-          <TextInput 
+        <View style={styles.displayTimerWrapper}>
+        <TextInput 
+           keyboardType = "numeric"
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
            placeholder = "RestPhase Timer"
            onChangeText = {(text) => this.restWorkTimer(text)} />
-
         </View>
+
         <View style={styles.timerTextWrapper}>
           <Text style={styles.timerText}>{this.displayTimer()}</Text>
         </View>
@@ -159,10 +172,10 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   phaseTextWrapper: {
-    height: 150,
-    width: 150,
+    height: 125,
+    width: 125,
     borderRadius: 75,
-    margin: 10,
+    margin: 5,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -179,5 +192,15 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor: "black",
     borderWidth: 1,
+    width: 175,
+    alignItems: "center",
+
+  },
+  displayTimerWrapper: {
+    margin:7,
+    borderColor: "black",
+    borderWidth: 1,
+    padding:3,
+    width:170
   },
 });
