@@ -102,16 +102,16 @@ export default class App extends React.Component {
     
   }
 
-  restWorkTimer = (text) =>
+  updateRestTimer = (text) =>
   {
-    if (isNaN(parseInt(text)))
-    {
-      Alert.alert("Please Enter Number")
-      this.setState({restPhaseTime : undefined})
+    if (text == "") {
       return null;
+    } else if (isNaN(parseInt(text))) {
+      Alert.alert(`Please Only Enter Numbers`)
+      return null;
+    } else {
+      this.setState({restPhaseTime : parseInt(text)});
     }
-
-    this.setState({restPhaseTime : parseInt(text)})
   }
 
   render() {
@@ -140,8 +140,7 @@ export default class App extends React.Component {
            keyboardType = "numeric"
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
            placeholder = "RestPhase Timer" 
-           //value = {this.state.restPhaseTime.toString()}
-           onChangeText = {(text) => this.restWorkTimer(text)} />
+           onSubmitEditing = {(event) => this.updateRestTimer(event.nativeEvent.text)} />
         </View>
 
         <View style={styles.timerTextWrapper}>
