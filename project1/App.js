@@ -26,7 +26,7 @@ export default class App extends React.Component {
     let { count } = this.state;
     count += 1;
 
-    if (count === this.state.workPhaseTime * 60) {
+    if (count === this.state.workPhaseTime * 60 && this.state.phase === "Work Phase") {
       // To vibrate the phone after 25 minutes - Work Phase
       this.setState({ phase: "Rest Phase", phaseBackgroundColor: "#008800" });
       count = 0;
@@ -87,28 +87,27 @@ export default class App extends React.Component {
 
   updateWorkTimer = (text) => 
   {
-    try{parseInt(text)}
-    catch 
-    {
 
-      //return null;
-
-      if (isNaN(parseInt(text)))
+      if (isNaN(parseInt(text)) && text != "")
       {
         Alert.alert("Please Enter Number")
+        //this.setState({restPhaseTime : undefined})
+        return null
       }
-      
-    }
 
-    this.setState({workPhaseTime : parseInt(text)})
+    //if (!(isNaN(parseInt(text)) && text === ""))
+    {
+      this.setState({workPhaseTime : parseInt(text)})
+    }
     
   }
 
   restWorkTimer = (text) =>
   {
-    try{parseInt(text)}
-    catch
+    if (isNaN(parseInt(text)))
     {
+      Alert.alert("Please Enter Number")
+      this.setState({restPhaseTime : undefined})
       return null;
     }
 
@@ -131,15 +130,17 @@ export default class App extends React.Component {
         <TextInput 
            keyboardType = "numeric"
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
-           placeholder = "WorkPhase Timer"
-           onChangeText = {(text) => this.updateWorkTimer(text)} />
+           placeholder = "WorkPhase Timer" 
+           //value = {this.state.workPhaseTime}
+           onSubmitEditing = {(text) => this.updateWorkTimer(text)} />
         </View>
 
         <View style={styles.displayTimerWrapper}>
         <TextInput 
            keyboardType = "numeric"
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
-           placeholder = "RestPhase Timer"
+           placeholder = "RestPhase Timer" 
+           //value = {this.state.restPhaseTime.toString()}
            onChangeText = {(text) => this.restWorkTimer(text)} />
         </View>
 
