@@ -88,7 +88,7 @@ export default class App extends React.Component {
   updateWorkTimer = (text) => 
   {
 
-      if (isNaN(parseInt(text)) && text != "")
+      if (isNaN(parseInt(text)))
       {
         Alert.alert("Please Enter Number")
         //this.setState({restPhaseTime : undefined})
@@ -102,7 +102,7 @@ export default class App extends React.Component {
     
   }
 
-  restWorkTimer = (text) =>
+  updateRestTimer = (text) =>
   {
     if (isNaN(parseInt(text)))
     {
@@ -141,7 +141,7 @@ export default class App extends React.Component {
            style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
            placeholder = "RestPhase Timer" 
            //value = {this.state.restPhaseTime.toString()}
-           onChangeText = {(text) => this.restWorkTimer(text)} />
+           onChangeText = {(text) => this.updateRestTimer(text)} />
         </View>
 
         <View style={styles.timerTextWrapper}>
