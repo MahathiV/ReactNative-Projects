@@ -10,14 +10,14 @@ export default class App extends React.Component {
     phase: "Work Phase",
     phaseBackgroundColor: "#ae77e7",
     workPhaseTime: 25,
-    restPhaseTime:5
+    restPhaseTime: 5,
   };
 
   startTimer = () => {
     if (!this.state.timerRunning) {
       this.setState({ timerRunning: true });
       this.setState({
-        timer: setInterval(this.increaseCount, 10),
+        timer: setInterval(this.increaseCount, 1000),
       });
     }
   };
@@ -26,14 +26,20 @@ export default class App extends React.Component {
     let { count } = this.state;
     count += 1;
 
-    if (count === this.state.workPhaseTime * 60 && this.state.phase === "Work Phase") {
+    if (
+      count === this.state.workPhaseTime * 60 &&
+      this.state.phase === "Work Phase"
+    ) {
       // To vibrate the phone after 25 minutes - Work Phase
       this.setState({ phase: "Rest Phase", phaseBackgroundColor: "#008800" });
       count = 0;
       vibrate();
     }
 
-    if (count === this.state.restPhaseTime * 60 && this.state.phase === "Rest Phase") {
+    if (
+      count === this.state.restPhaseTime * 60 &&
+      this.state.phase === "Rest Phase"
+    ) {
       // To vibrate the phone after 5 minutes - Rest Phase
       this.setState({ phase: "Work Phase", phaseBackgroundColor: "#ae77e7" });
       count = 0;
@@ -66,13 +72,17 @@ export default class App extends React.Component {
       if (this.state.count === 0) {
         return `${this.state.workPhaseTime}`;
       } else {
-        return `${(this.state.workPhaseTime - 1) - Math.floor(this.state.count / 60)}`;
+        return `${
+          this.state.workPhaseTime - 1 - Math.floor(this.state.count / 60)
+        }`;
       }
     } else {
       if (this.state.count === 0) {
         return `${this.state.restPhaseTime}`;
       } else {
-        return `${(this.state.restPhaseTime - 1) - Math.floor(this.state.count / 60)}`;
+        return `${
+          this.state.restPhaseTime - 1 - Math.floor(this.state.count / 60)
+        }`;
       }
     }
   };
@@ -85,34 +95,29 @@ export default class App extends React.Component {
     return `${this.state.phase}`;
   };
 
-  updateWorkTimer = (text) => 
-  {
-
-      if (isNaN(parseInt(text)))
-      {
-        Alert.alert("Please Enter Number")
-        //this.setState({restPhaseTime : undefined})
-        return null
-      }
-
-    //if (!(isNaN(parseInt(text)) && text === ""))
-    {
-      this.setState({workPhaseTime : parseInt(text)})
-    }
-    
-  }
-
-  updateRestTimer = (text) =>
-  {
-    if (isNaN(parseInt(text)))
-    {
-      Alert.alert("Please Enter Number")
-      this.setState({restPhaseTime : undefined})
+  updateWorkTimer = (text) => {
+    if (text == "") {
       return null;
+    } else if (isNaN(parseInt(text))) {
+      Alert.alert(`Please Only Enter Numbers`);
+      this.workInput.clear(); // To clear the textboxes after validation message
+      return null;
+    } else {
+      this.setState({ workPhaseTime: parseInt(text) });
     }
+  };
 
-    this.setState({restPhaseTime : parseInt(text)})
-  }
+  updateRestTimer = (text) => {
+    if (text == "") {
+      return null;
+    } else if (isNaN(parseInt(text))) {
+      Alert.alert(`Please Only Enter Numbers`);
+      this.restInput.clear(); // To clear the textboxes after validation message
+      return null;
+    } else {
+      this.setState({ restPhaseTime: parseInt(text) });
+    }
+  };
 
   render() {
     return (
@@ -127,21 +132,27 @@ export default class App extends React.Component {
         </View>
 
         <View style={styles.displayTimerWrapper}>
-        <TextInput 
-           keyboardType = "numeric"
-           style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
-           placeholder = "WorkPhase Timer" 
-           //value = {this.state.workPhaseTime}
-           onSubmitEditing = {(text) => this.updateWorkTimer(text)} />
+          <TextInput
+            keyboardType="numeric"
+            style={{ height: 40, backgroundColor: "azure", fontSize: 20 }}
+            placeholder="WorkPhase Timer"
+            ref={(input) => {
+              this.workInput = input;
+            }}
+            onChangeText={(text) => this.updateWorkTimer(text)}
+          />
         </View>
 
         <View style={styles.displayTimerWrapper}>
-        <TextInput 
-           keyboardType = "numeric"
-           style = {{height: 40,backgroundColor: 'azure', fontSize: 20}}
-           placeholder = "RestPhase Timer" 
-           //value = {this.state.restPhaseTime.toString()}
-           onChangeText = {(text) => this.updateRestTimer(text)} />
+          <TextInput
+            keyboardType="numeric"
+            style={{ height: 40, backgroundColor: "azure", fontSize: 20 }}
+            placeholder="RestPhase Timer"
+            ref={(input) => {
+              this.restInput = input;
+            }}
+            onChangeText={(text) => this.updateRestTimer(text)}
+          />
         </View>
 
         <View style={styles.timerTextWrapper}>
@@ -195,13 +206,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 175,
     alignItems: "center",
-
   },
   displayTimerWrapper: {
-    margin:7,
+    margin: 7,
     borderColor: "black",
     borderWidth: 1,
-    padding:3,
-    width:170
+    padding: 3,
+    width: 170,
   },
 });
